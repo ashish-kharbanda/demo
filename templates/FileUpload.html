@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>File Upload</title>
+<meta charset="utf-8">
+</head>
+<script type="text/javascript">
+	function uploadtoserver() {
+		var file = document.getElementById('abc').files[0];
+		if (file.size > 5000000) {
+			alert('File size cannot exceed 5 MB');
+			return false;
+		}
+	}
+</script>
+<body>
+	<form action="http://127.0.0.1:5000/submit" method="POST" enctype = "multipart/form-data" onsubmit="return(uploadtoserver())">
+		<table border="1">
+			<tr>
+				<td>Access Key:</td>
+				<td><input type="text" name="accesskey" size="35" required="required"></td>
+			</tr>
+			<tr>
+				<td>Secret Key:</td>
+				<td><input type="text" name="secretkey" size="35" required="required"></td>
+			</tr>
+
+			<tr>
+				<td>Target Bucket Path:</td>
+				<td><input type="text" name="targetbucketpath" placeholder="samplebucket/alpha/beta" size="35" required="required"></td>
+
+			</tr>
+			<tr>
+				<td>File:</td>
+				<td><input type="file" name="file" id="abc" required="required"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><input type="submit"
+					value="UPLOAD"></td>
+			</tr>
+		</table>
+	</form>
+	<br/>
+{% if files %}
+	<h3>Path Contents:</h3>
+	<br/>
+	<table border="1">
+		<tr>
+			<th>S.No.</th>
+			<th>File Name</th>
+			<th>Bucket Path</th>
+		</tr>
+		{% for file in files %}
+				{% if files[file]==filename %}
+					<tr  bgcolor="yellow">
+						<td>{{file}}</td>
+    					<td>{{files[file]}}</td>
+						<td>{{bucket}}</td>
+					</tr>
+				{% endif %}
+				{% if files[file]!=filename %}
+					<tr>
+						<td>{{file}}</td>
+    					<td>{{files[file]}}</td>
+						<td>{{bucket}}</td>
+					</tr>
+				{% endif %}
+		{% endfor %}
+	</table>
+{% endif %}
+{% if files==None %}
+	<h4>Failed to upload file</h4>
+{% endif %}
+
+</body>
+</html>
